@@ -1,3 +1,5 @@
+import { signInWithGoogle } from "../firebase/auth"
+
 function Hero() {
   return (
     <section className="relative flex flex-col items-center justify-center text-center py-32 px-6 overflow-hidden">
@@ -19,6 +21,13 @@ function Hero() {
 
       <button className="mt-8 bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-xl font-semibold transition relative z-10">
         Shop Now
+      </button>
+
+      <button
+        onClick={signInWithGoogle}
+        className="mt-4 border border-gray-700 px-8 py-3 rounded-xl hover:bg-white hover:text-black transition relative z-10"
+      >
+        Login with Google
       </button>
 
     </section>
