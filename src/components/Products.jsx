@@ -1,13 +1,21 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../firebase/config"
+import { CartContext } from "../context/CartContext"
+
+import toast from "react-hot-toast"
 
 function Products() {
   const [products, setProducts] = useState([])
 
+  const { addToCart } =
+    useContext(CartContext)
+
   useEffect(() => {
     const fetchProducts = async () => {
-      const querySnapshot = await getDocs(collection(db, "products"))
+      const querySnapshot = await getDocs(
+        collection(db, "products")
+      )
 
       const data = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -52,6 +60,19 @@ function Products() {
               <p className="text-purple-400 mt-2 text-lg">
                 ${product.price}
               </p>
+
+              <button
+                onClick={() => {
+                  addToCart(product)
+
+                  toast.success(
+                    `${product.name} added to cart`
+                  )
+                }}
+                className="mt-5 w-full bg-purple-600 hover:bg-purple-700 py-3 rounded-xl font-semibold transition"
+              >
+                Add To Cart
+              </button>
             </div>
           </div>
         ))}

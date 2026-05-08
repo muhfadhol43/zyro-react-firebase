@@ -1,9 +1,24 @@
-import { useEffect, useState } from "react"
-import { observeUser, logout } from "../firebase/auth"
+import {
+  useEffect,
+  useState,
+  useContext,
+} from "react"
+
+import {
+  observeUser,
+  logout,
+} from "../firebase/auth"
+
+import { CartContext } from "../context/CartContext"
 
 function Navbar() {
-
   const [user, setUser] = useState(null)
+
+  const {
+    cartItems,
+    isCartOpen,
+    setIsCartOpen,
+  } = useContext(CartContext)
 
   useEffect(() => {
     observeUser((currentUser) => {
@@ -19,6 +34,15 @@ function Navbar() {
       </h1>
 
       <div className="flex items-center gap-4">
+
+        <button
+          onClick={() =>
+            setIsCartOpen(!isCartOpen)
+          }
+          className="bg-purple-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-purple-700 transition"
+        >
+          Cart: {cartItems.length}
+        </button>
 
         {user ? (
           <>
@@ -46,7 +70,6 @@ function Navbar() {
         )}
 
       </div>
-
     </nav>
   )
 }
