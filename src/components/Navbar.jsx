@@ -1,4 +1,16 @@
+import { useEffect, useState } from "react"
+import { observeUser, logout } from "../firebase/auth"
+
 function Navbar() {
+
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    observeUser((currentUser) => {
+      setUser(currentUser)
+    })
+  }, [])
+
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/70 flex items-center justify-between px-8 py-5 border-b border-gray-800">
 
@@ -6,19 +18,34 @@ function Navbar() {
         ZYRO
       </h1>
 
-      <ul className="flex gap-6 text-sm">
-        <li className="hover:text-purple-400 cursor-pointer transition">
-          Home
-        </li>
+      <div className="flex items-center gap-4">
 
-        <li className="hover:text-purple-400 cursor-pointer transition">
-          Products
-        </li>
+        {user ? (
+          <>
+            <img
+              src={user.photoURL}
+              alt="user"
+              className="w-10 h-10 rounded-full border border-purple-500"
+            />
 
-        <li className="hover:text-purple-400 cursor-pointer transition">
-          Contact
-        </li>
-      </ul>
+            <p className="text-sm">
+              {user.displayName}
+            </p>
+
+            <button
+              onClick={logout}
+              className="bg-red-500 px-4 py-2 rounded-lg text-sm"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <p className="text-gray-400 text-sm">
+            Guest
+          </p>
+        )}
+
+      </div>
 
     </nav>
   )
