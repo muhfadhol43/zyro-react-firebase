@@ -29,7 +29,7 @@ function App() {
   const location = useLocation()
 
   return (
-    <div className="bg-black min-h-screen text-white">
+    <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-black to-zinc-900 text-white">
 
       <Navbar />
 
