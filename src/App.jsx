@@ -1,15 +1,61 @@
+import {
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom"
+
+import {
+  AnimatePresence,
+} from "framer-motion"
+
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import Products from "./components/Products"
 import CartSidebar from "./components/CartSidebar"
 
-function App() {
+import ProductDetail from "./pages/ProductDetail"
+
+function HomePage() {
   return (
-    <div className="bg-black min-h-screen text-white">
-      <Navbar />
+    <>
       <Hero />
       <Products />
+    </>
+  )
+}
+
+function App() {
+
+  const location = useLocation()
+
+  return (
+    <div className="bg-black min-h-screen text-white">
+
+      <Navbar />
+
+      <AnimatePresence mode="wait">
+
+        <Routes
+          location={location}
+          key={location.pathname}
+        >
+
+          <Route
+            path="/"
+            element={<HomePage />}
+          />
+
+          <Route
+            path="/product/:id"
+            element={<ProductDetail />}
+          />
+
+        </Routes>
+
+      </AnimatePresence>
+
       <CartSidebar />
+
     </div>
   )
 }

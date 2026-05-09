@@ -14,11 +14,21 @@ import { CartContext } from "../context/CartContext"
 function Navbar() {
   const [user, setUser] = useState(null)
 
+  const [scrolled, setScrolled] =
+    useState(false)
+
   const {
     cartItems,
     isCartOpen,
     setIsCartOpen,
   } = useContext(CartContext)
+
+  const totalItems =
+    cartItems.reduce(
+      (total, item) =>
+        total + item.quantity,
+      0
+    )
 
   useEffect(() => {
     observeUser((currentUser) => {
@@ -26,8 +36,33 @@ function Navbar() {
     })
   }, [])
 
+  useEffect(() => {
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+
+    window.addEventListener(
+      "scroll",
+      handleScroll
+    )
+
+    return () =>
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      )
+
+  }, [])
+
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/70 flex items-center justify-between px-8 py-5 border-b border-gray-800">
+    <nav
+      className={`sticky top-0 z-50 backdrop-blur-md flex items-center justify-between px-8 py-5 border-b transition-all duration-300 ${
+        scrolled
+          ? "bg-black/90 border-zinc-800 shadow-2xl"
+          : "bg-black/60 border-transparent"
+      }`}
+    >
 
       <h1 className="text-2xl font-bold text-purple-500">
         ZYRO
@@ -39,9 +74,17 @@ function Navbar() {
           onClick={() =>
             setIsCartOpen(!isCartOpen)
           }
-          className="bg-purple-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-purple-700 transition"
+          className="relative bg-purple-600 px-5 py-3 rounded-xl text-sm font-semibold hover:bg-purple-700 transition"
         >
-          Cart: {cartItems.length}
+
+          Cart
+
+          {totalItems > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center">
+              {totalItems}
+            </span>
+          )}
+
         </button>
 
         {user ? (
@@ -70,6 +113,7 @@ function Navbar() {
         )}
 
       </div>
+
     </nav>
   )
 }

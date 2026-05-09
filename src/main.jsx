@@ -7,11 +7,15 @@ import CartProvider from "./context/CartContext"
 
 import { Toaster } from "react-hot-toast"
 
+import { BrowserRouter } from "react-router-dom"
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <CartProvider>
-      <App />
-      <Toaster />
-    </CartProvider>
+    <BrowserRouter>
+      <CartProvider>
+        <App />
+        <Toaster />
+      </CartProvider>
+    </BrowserRouter>
   </React.StrictMode>
 )

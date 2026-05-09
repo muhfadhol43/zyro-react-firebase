@@ -28,6 +28,9 @@ function CartProvider({ children }) {
         (item) => item.id === product.id
       )
 
+    const qty =
+      product.quantity || 1
+
     if (existingItem) {
 
       setCartItems((prev) =>
@@ -36,7 +39,7 @@ function CartProvider({ children }) {
             ? {
                 ...item,
                 quantity:
-                  (item.quantity || 1) + 1,
+                  item.quantity + qty,
               }
             : item
         )
@@ -48,7 +51,7 @@ function CartProvider({ children }) {
         ...prev,
         {
           ...product,
-          quantity: 1,
+          quantity: qty,
         },
       ])
 
@@ -91,6 +94,10 @@ function CartProvider({ children }) {
     )
   }
 
+  const clearCart = () => {
+    setCartItems([])
+  }
+
   useEffect(() => {
     localStorage.setItem(
       "cart",
@@ -106,6 +113,7 @@ function CartProvider({ children }) {
         removeFromCart,
         increaseQty,
         decreaseQty,
+        clearCart,
         isCartOpen,
         setIsCartOpen,
       }}

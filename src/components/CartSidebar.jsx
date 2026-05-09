@@ -1,5 +1,13 @@
-import { useContext } from "react"
+import {
+  useContext,
+  useEffect,
+} from "react"
+
 import { CartContext } from "../context/CartContext"
+
+import toast from "react-hot-toast"
+
+import { motion } from "framer-motion"
 
 function CartSidebar() {
 
@@ -8,9 +16,32 @@ function CartSidebar() {
     removeFromCart,
     increaseQty,
     decreaseQty,
+    clearCart,
     isCartOpen,
     setIsCartOpen,
   } = useContext(CartContext)
+
+  const handleCheckout = () => {
+
+    toast.success(
+      "Checkout successful!"
+    )
+
+    clearCart()
+
+    setIsCartOpen(false)
+  }
+
+  useEffect(() => {
+
+    if (
+      cartItems.length === 0 &&
+      isCartOpen
+    ) {
+      setIsCartOpen(false)
+    }
+
+  }, [cartItems, isCartOpen])
 
   return (
     <>
@@ -25,12 +56,15 @@ function CartSidebar() {
       )}
 
       {/* Sidebar */}
-      <div
-        className={`fixed top-0 right-0 w-80 h-screen bg-zinc-900 border-l border-zinc-800 p-6 transition duration-300 overflow-y-auto z-50 ${
-          isCartOpen
-            ? "translate-x-0"
-            : "translate-x-full"
-        }`}
+      <motion.div
+        initial={{ x: 400 }}
+        animate={{
+          x: isCartOpen ? 0 : 400,
+        }}
+        transition={{
+          duration: 0.3,
+        }}
+        className="fixed top-0 right-0 w-80 h-screen bg-zinc-900 border-l border-zinc-800 p-6 overflow-y-auto z-50"
       >
 
         <div className="flex items-center justify-between mb-6">
@@ -156,8 +190,16 @@ function CartSidebar() {
         </div>
 
         <button
+          onClick={clearCart}
+          className="mt-6 w-full bg-red-500 hover:bg-red-600 py-3 rounded-xl font-semibold transition"
+        >
+          Clear Cart
+        </button>
+
+        <button
+          onClick={handleCheckout}
           disabled={cartItems.length === 0}
-          className={`mt-6 w-full py-3 rounded-xl font-semibold transition ${
+          className={`mt-4 w-full py-3 rounded-xl font-semibold transition ${
             cartItems.length === 0
               ? "bg-zinc-700 cursor-not-allowed"
               : "bg-purple-600 hover:bg-purple-700"
@@ -166,7 +208,7 @@ function CartSidebar() {
           Checkout
         </button>
 
-      </div>
+      </motion.div>
     </>
   )
 }
