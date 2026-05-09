@@ -27,6 +27,17 @@ Modern ecommerce web application built with React, Tailwind CSS, and Firebase.
 
 https://zyro-react-firebase.vercel.app
 
+## Screenshots
+
+### Homepage
+![Homepage](./public/screenshots/homepage.png)
+
+### Product Detail
+![Product Detail](./public/screenshots/product-detail.png)
+
+### Cart Sidebar
+![Cart](./public/screenshots/cart.png)
+
 ## Installation
 
 ```bash
