@@ -56,6 +56,8 @@ function CartProvider({ children }) {
       ])
 
     }
+
+    setIsCartOpen(true)
   }
 
   const removeFromCart = (index) => {

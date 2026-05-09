@@ -19,7 +19,16 @@ function Hero() {
         Modern sneaker marketplace built with React, Tailwind, and Firebase.
       </p>
 
-      <button className="mt-8 bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-xl font-semibold transition relative z-10">
+      <button
+        onClick={() => {
+          document
+            .getElementById("products")
+            ?.scrollIntoView({
+              behavior: "smooth",
+            })
+        }}
+        className="mt-8 bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-xl font-semibold transition relative z-10"
+      >
         Shop Now
       </button>
 

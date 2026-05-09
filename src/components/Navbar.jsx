@@ -9,9 +9,12 @@ import {
   logout,
 } from "../firebase/auth"
 
+import { Link } from "react-router-dom"
+
 import { CartContext } from "../context/CartContext"
 
 function Navbar() {
+
   const [user, setUser] = useState(null)
 
   const [scrolled, setScrolled] =
@@ -64,9 +67,13 @@ function Navbar() {
       }`}
     >
 
-      <h1 className="text-2xl font-bold text-purple-500">
-        ZYRO
-      </h1>
+      <Link to="/">
+
+        <h1 className="text-2xl font-bold text-purple-500 hover:text-purple-400 transition">
+          ZYRO
+        </h1>
+
+      </Link>
 
       <div className="flex items-center gap-4">
 
@@ -101,7 +108,7 @@ function Navbar() {
 
             <button
               onClick={logout}
-              className="bg-red-500 px-4 py-2 rounded-lg text-sm"
+              className="bg-red-500 px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition"
             >
               Logout
             </button>

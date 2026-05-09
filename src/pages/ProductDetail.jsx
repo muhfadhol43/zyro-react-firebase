@@ -51,6 +51,10 @@ function ProductDetail() {
         await getDoc(docRef)
 
       if (docSnap.exists()) {
+
+        document.title =
+          `${docSnap.data().name} | ZYRO`
+
         setProduct({
           id: docSnap.id,
           ...docSnap.data(),
@@ -61,6 +65,15 @@ function ProductDetail() {
     fetchProduct()
 
   }, [id])
+
+  useEffect(() => {
+
+    return () => {
+      document.title =
+        "ZYRO | Sneakers Store"
+    }
+
+  }, [])
 
   if (!product) {
     return (

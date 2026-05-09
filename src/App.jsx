@@ -1,4 +1,9 @@
 import {
+  useEffect,
+  useState,
+} from "react"
+
+import {
   Routes,
   Route,
   useLocation,
@@ -12,8 +17,11 @@ import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import Products from "./components/Products"
 import CartSidebar from "./components/CartSidebar"
+import Footer from "./components/Footer"
+import Loader from "./components/Loader"
 
 import ProductDetail from "./pages/ProductDetail"
+import NotFound from "./pages/NotFound"
 
 function HomePage() {
   return (
@@ -27,6 +35,29 @@ function HomePage() {
 function App() {
 
   const location = useLocation()
+
+  const [loading, setLoading] =
+    useState(true)
+
+  useEffect(() => {
+
+    window.scrollTo(0, 0)
+
+  }, [location.pathname])
+
+  useEffect(() => {
+
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+
+    return () => clearTimeout(timer)
+
+  }, [])
+
+  if (loading) {
+    return <Loader />
+  }
 
   return (
     <div className="bg-black min-h-screen text-white">
@@ -50,9 +81,16 @@ function App() {
             element={<ProductDetail />}
           />
 
+          <Route
+            path="*"
+            element={<NotFound />}
+          />
+
         </Routes>
 
       </AnimatePresence>
+
+      <Footer />
 
       <CartSidebar />
 
