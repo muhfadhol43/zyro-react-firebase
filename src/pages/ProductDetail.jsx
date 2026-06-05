@@ -133,7 +133,13 @@ function ProductDetail() {
 
         <div>
 
-          <h1 className="text-6xl font-bold">
+          {product.featured && (
+            <span className="bg-yellow-500 text-black px-3 py-1 rounded-full text-sm font-bold">
+              🔥 Featured
+            </span>
+          )}
+
+          <h1 className="text-6xl font-bold mt-4">
             {product.name}
           </h1>
 
@@ -141,9 +147,29 @@ function ProductDetail() {
             ${product.price}
           </p>
 
-          <p className="text-gray-400 mt-6 leading-relaxed">
-            Premium futuristic sneakers built for comfort and modern streetwear style.
-          </p>
+          <div className="mt-6 space-y-4">
+
+            <p className="text-gray-400 leading-relaxed">
+              {product.description}
+            </p>
+
+            <div className="flex flex-wrap gap-6">
+
+              <span className="text-yellow-400">
+                ⭐ {product.rating}
+              </span>
+
+              <span className="text-green-400">
+                📦 {product.stock} In Stock
+              </span>
+
+              <span className="text-purple-400">
+                🏷️ {product.category}
+              </span>
+
+            </div>
+
+          </div>
 
           <div className="flex items-center gap-4 mt-10">
 
@@ -175,6 +201,7 @@ function ProductDetail() {
 
           <button
             onClick={() => {
+
               addToCart({
                 ...product,
                 quantity,
@@ -183,6 +210,7 @@ function ProductDetail() {
               toast.success(
                 `${product.name} added to cart`
               )
+
             }}
             className="mt-10 bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-2xl font-semibold transition"
           >
