@@ -4,14 +4,18 @@ import {
   useEffect,
 } from "react"
 
-export const CartContext = createContext()
+export const CartContext =
+  createContext()
 
-function CartProvider({ children }) {
-
+function CartProvider({
+  children,
+}) {
   const [cartItems, setCartItems] =
     useState(() => {
       const savedCart =
-        localStorage.getItem("cart")
+        localStorage.getItem(
+          "cart"
+        )
 
       return savedCart
         ? JSON.parse(savedCart)
@@ -21,32 +25,32 @@ function CartProvider({ children }) {
   const [isCartOpen, setIsCartOpen] =
     useState(false)
 
-  const addToCart = (product) => {
-
+  const addToCart = (
+    product
+  ) => {
     const existingItem =
       cartItems.find(
-        (item) => item.id === product.id
+        (item) =>
+          item.id === product.id
       )
 
     const qty =
       product.quantity || 1
 
     if (existingItem) {
-
       setCartItems((prev) =>
         prev.map((item) =>
           item.id === product.id
             ? {
                 ...item,
                 quantity:
-                  item.quantity + qty,
+                  item.quantity +
+                  qty,
               }
             : item
         )
       )
-
     } else {
-
       setCartItems((prev) => [
         ...prev,
         {
@@ -54,15 +58,18 @@ function CartProvider({ children }) {
           quantity: qty,
         },
       ])
-
     }
 
     setIsCartOpen(true)
   }
 
-  const removeFromCart = (index) => {
+  const removeFromCart = (
+    index
+  ) => {
     setCartItems((prev) =>
-      prev.filter((_, i) => i !== index)
+      prev.filter(
+        (_, i) => i !== index
+      )
     )
   }
 
@@ -73,7 +80,8 @@ function CartProvider({ children }) {
           ? {
               ...item,
               quantity:
-                (item.quantity || 1) + 1,
+                (item.quantity ||
+                  1) + 1,
             }
           : item
       )
@@ -88,11 +96,18 @@ function CartProvider({ children }) {
             ? {
                 ...item,
                 quantity:
-                  item.quantity - 1,
+                  Math.max(
+                    0,
+                    item.quantity -
+                      1
+                  ),
               }
             : item
         )
-        .filter((item) => item.quantity > 0)
+        .filter(
+          (item) =>
+            item.quantity > 0
+        )
     )
   }
 
@@ -100,17 +115,46 @@ function CartProvider({ children }) {
     setCartItems([])
   }
 
-  useEffect(() => {
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(cartItems)
+  const cartCount =
+    cartItems.reduce(
+      (total, item) =>
+        total +
+        (item.quantity || 1),
+      0
     )
+
+  const cartTotal =
+    cartItems.reduce(
+      (total, item) =>
+        total +
+        item.price *
+          (item.quantity || 1),
+      0
+    )
+
+  useEffect(() => {
+    if (
+      cartItems.length === 0
+    ) {
+      localStorage.removeItem(
+        "cart"
+      )
+    } else {
+      localStorage.setItem(
+        "cart",
+        JSON.stringify(
+          cartItems
+        )
+      )
+    }
   }, [cartItems])
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
+        cartCount,
+        cartTotal,
         addToCart,
         removeFromCart,
         increaseQty,
