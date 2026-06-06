@@ -21,6 +21,7 @@ import Footer from "./components/Footer"
 import Loader from "./components/Loader"
 
 import ProductDetail from "./pages/ProductDetail"
+import Checkout from "./pages/Checkout"
 import NotFound from "./pages/NotFound"
 
 function HomePage() {
@@ -33,26 +34,22 @@ function HomePage() {
 }
 
 function App() {
-
   const location = useLocation()
 
   const [loading, setLoading] =
     useState(true)
 
   useEffect(() => {
-
     window.scrollTo(0, 0)
-
   }, [location.pathname])
 
   useEffect(() => {
-
     const timer = setTimeout(() => {
       setLoading(false)
     }, 1500)
 
-    return () => clearTimeout(timer)
-
+    return () =>
+      clearTimeout(timer)
   }, [])
 
   if (loading) {
@@ -61,16 +58,13 @@ function App() {
 
   return (
     <div className="bg-black min-h-screen text-white">
-
       <Navbar />
 
       <AnimatePresence mode="wait">
-
         <Routes
           location={location}
           key={location.pathname}
         >
-
           <Route
             path="/"
             element={<HomePage />}
@@ -78,22 +72,26 @@ function App() {
 
           <Route
             path="/product/:id"
-            element={<ProductDetail />}
+            element={
+              <ProductDetail />
+            }
+          />
+
+          <Route
+            path="/checkout"
+            element={<Checkout />}
           />
 
           <Route
             path="*"
             element={<NotFound />}
           />
-
         </Routes>
-
       </AnimatePresence>
 
       <Footer />
 
       <CartSidebar />
-
     </div>
   )
 }

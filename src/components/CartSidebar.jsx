@@ -5,11 +5,13 @@ import {
 
 import { CartContext } from "../context/CartContext"
 
-import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 import { motion } from "framer-motion"
 
 function CartSidebar() {
+  const navigate = useNavigate()
+
   const {
     cartItems,
     removeFromCart,
@@ -20,36 +22,22 @@ function CartSidebar() {
     setIsCartOpen,
   } = useContext(CartContext)
 
-  const subtotal =
-    cartItems.reduce(
-      (total, item) =>
-        total +
-        item.price *
-          (item.quantity || 1),
-      0
-    )
+  const subtotal = cartItems.reduce(
+    (total, item) =>
+      total +
+      item.price * (item.quantity || 1),
+    0
+  )
 
   const tax = subtotal * 0.1
 
   const total = subtotal + tax
 
-  const totalItems =
-    cartItems.reduce(
-      (total, item) =>
-        total +
-        (item.quantity || 1),
-      0
-    )
-
-  const handleCheckout = () => {
-    toast.success(
-      "🎉 Order placed successfully!"
-    )
-
-    clearCart()
-
-    setIsCartOpen(false)
-  }
+  const totalItems = cartItems.reduce(
+    (total, item) =>
+      total + (item.quantity || 1),
+    0
+  )
 
   useEffect(() => {
     if (
@@ -78,9 +66,7 @@ function CartSidebar() {
       <motion.div
         initial={{ x: 400 }}
         animate={{
-          x: isCartOpen
-            ? 0
-            : 400,
+          x: isCartOpen ? 0 : 400,
         }}
         transition={{
           duration: 0.3,
@@ -103,8 +89,7 @@ function CartSidebar() {
         </div>
 
         <div className="space-y-4">
-          {cartItems.length ===
-            0 && (
+          {cartItems.length === 0 && (
             <div className="bg-black p-8 rounded-2xl text-center">
               <div className="text-5xl mb-3">
                 🛒
@@ -147,8 +132,7 @@ function CartSidebar() {
                   </div>
 
                   <p className="text-purple-400 mt-1">
-                    $
-                    {item.price}
+                    ${item.price}
                   </p>
 
                   <div className="flex items-center gap-3 mt-3">
@@ -164,8 +148,7 @@ function CartSidebar() {
                     </button>
 
                     <p className="text-sm">
-                      {item.quantity ||
-                        1}
+                      {item.quantity || 1}
                     </p>
 
                     <button
@@ -202,10 +185,7 @@ function CartSidebar() {
             </span>
 
             <span>
-              $
-              {subtotal.toFixed(
-                2
-              )}
+              ${subtotal.toFixed(2)}
             </span>
           </div>
 
@@ -215,8 +195,7 @@ function CartSidebar() {
             </span>
 
             <span>
-              $
-              {tax.toFixed(2)}
+              ${tax.toFixed(2)}
             </span>
           </div>
 
@@ -224,10 +203,7 @@ function CartSidebar() {
             <span>Total</span>
 
             <span className="text-purple-400">
-              $
-              {total.toFixed(
-                2
-              )}
+              ${total.toFixed(2)}
             </span>
           </div>
         </div>
@@ -238,8 +214,7 @@ function CartSidebar() {
             cartItems.length === 0
           }
           className={`mt-6 w-full py-3 rounded-xl font-semibold transition ${
-            cartItems.length ===
-            0
+            cartItems.length === 0
               ? "bg-zinc-700 cursor-not-allowed"
               : "bg-red-500 hover:bg-red-600"
           }`}
@@ -248,15 +223,15 @@ function CartSidebar() {
         </button>
 
         <button
-          onClick={
-            handleCheckout
-          }
+          onClick={() => {
+            setIsCartOpen(false)
+            navigate("/checkout")
+          }}
           disabled={
             cartItems.length === 0
           }
           className={`mt-4 w-full py-3 rounded-xl font-semibold transition ${
-            cartItems.length ===
-            0
+            cartItems.length === 0
               ? "bg-zinc-700 cursor-not-allowed"
               : "bg-purple-600 hover:bg-purple-700"
           }`}
