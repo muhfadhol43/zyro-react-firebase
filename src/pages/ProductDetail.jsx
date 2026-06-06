@@ -23,7 +23,6 @@ import toast from "react-hot-toast"
 import { motion } from "framer-motion"
 
 function ProductDetail() {
-
   const { id } = useParams()
 
   const navigate = useNavigate()
@@ -38,9 +37,7 @@ function ProductDetail() {
     useContext(CartContext)
 
   useEffect(() => {
-
     const fetchProduct = async () => {
-
       const docRef = doc(
         db,
         "products",
@@ -51,7 +48,6 @@ function ProductDetail() {
         await getDoc(docRef)
 
       if (docSnap.exists()) {
-
         document.title =
           `${docSnap.data().name} | ZYRO`
 
@@ -63,62 +59,58 @@ function ProductDetail() {
     }
 
     fetchProduct()
-
   }, [id])
 
   useEffect(() => {
-
     return () => {
       document.title =
         "ZYRO | Sneakers Store"
     }
-
   }, [])
 
   if (!product) {
     return (
       <div className="px-8 py-20">
-
         <div className="grid md:grid-cols-2 gap-12 items-center animate-pulse">
-
           <div className="h-[500px] bg-zinc-900 rounded-3xl"></div>
 
           <div>
-
             <div className="h-12 bg-zinc-900 rounded w-2/3"></div>
-
             <div className="h-8 bg-zinc-900 rounded w-1/3 mt-6"></div>
-
             <div className="h-24 bg-zinc-900 rounded mt-8"></div>
-
             <div className="h-14 bg-zinc-900 rounded-2xl mt-10"></div>
-
           </div>
-
         </div>
-
       </div>
     )
   }
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      exit={{
+        opacity: 0,
+      }}
+      transition={{
+        duration: 0.3,
+      }}
       className="px-8 py-20"
     >
-
       <button
-        onClick={() => navigate(-1)}
+        onClick={() =>
+          navigate(-1)
+        }
         className="mb-10 bg-zinc-900 hover:bg-zinc-800 px-6 py-3 rounded-2xl transition"
       >
         ← Back
       </button>
 
       <div className="grid md:grid-cols-2 gap-12 items-center">
-
         <motion.img
           src={product.image}
           alt={product.name}
@@ -132,7 +124,6 @@ function ProductDetail() {
         />
 
         <div>
-
           {product.featured && (
             <span className="bg-yellow-500 text-black px-3 py-1 rounded-full text-sm font-bold">
               🔥 Featured
@@ -148,13 +139,11 @@ function ProductDetail() {
           </p>
 
           <div className="mt-6 space-y-4">
-
             <p className="text-gray-400 leading-relaxed">
               {product.description}
             </p>
 
             <div className="flex flex-wrap gap-6">
-
               <span className="text-yellow-400">
                 ⭐ {product.rating}
               </span>
@@ -166,17 +155,17 @@ function ProductDetail() {
               <span className="text-purple-400">
                 🏷️ {product.category}
               </span>
-
             </div>
-
           </div>
 
           <div className="flex items-center gap-4 mt-10">
-
             <button
               onClick={() =>
-                setQuantity((prev) =>
-                  prev > 1 ? prev - 1 : 1
+                setQuantity(
+                  (prev) =>
+                    prev > 1
+                      ? prev - 1
+                      : 1
                 )
               }
               className="bg-zinc-900 w-12 h-12 rounded-xl text-xl"
@@ -190,37 +179,71 @@ function ProductDetail() {
 
             <button
               onClick={() =>
-                setQuantity((prev) => prev + 1)
+                setQuantity(
+                  (prev) =>
+                    prev <
+                    product.stock
+                      ? prev + 1
+                      : prev
+                )
               }
               className="bg-zinc-900 w-12 h-12 rounded-xl text-xl"
             >
               +
             </button>
-
           </div>
 
-          <button
-            onClick={() => {
+          <div className="mt-6 bg-zinc-900 p-4 rounded-2xl">
+            <p className="text-gray-400">
+              Total Price
+            </p>
 
-              addToCart({
-                ...product,
-                quantity,
-              })
+            <p className="text-3xl font-bold text-purple-400">
+              $
+              {(
+                product.price *
+                quantity
+              ).toFixed(2)}
+            </p>
+          </div>
 
-              toast.success(
-                `${product.name} added to cart`
-              )
+          <div className="flex gap-4 mt-8">
+            <button
+              onClick={() => {
+                addToCart({
+                  ...product,
+                  quantity,
+                })
 
-            }}
-            className="mt-10 bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-2xl font-semibold transition"
-          >
-            Add To Cart
-          </button>
+                toast.success(
+                  `${product.name} added to cart`
+                )
+              }}
+              className="flex-1 bg-purple-600 hover:bg-purple-700 py-4 rounded-2xl font-semibold transition"
+            >
+              Add To Cart
+            </button>
 
+            <button
+              onClick={() => {
+                addToCart({
+                  ...product,
+                  quantity,
+                })
+
+                toast.success(
+                  "Ready for checkout"
+                )
+
+                navigate("/")
+              }}
+              className="flex-1 bg-white text-black hover:bg-gray-200 py-4 rounded-2xl font-semibold transition"
+            >
+              Buy Now
+            </button>
+          </div>
         </div>
-
       </div>
-
     </motion.div>
   )
 }
