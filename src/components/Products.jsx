@@ -87,7 +87,7 @@ const {
 
   if (loading) {
     return (
-      <section className="px-6 py-20">
+      <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="grid md:grid-cols-3 gap-8">
           {[1, 2, 3].map((item) => (
             <div
@@ -109,7 +109,10 @@ const {
   }
 
   return (
-    <section className="px-6 py-20">
+    <section
+  id="products"
+  className="max-w-7xl mx-auto px-6 py-20"
+>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
         <div>
           <h2 className="text-5xl font-bold">
@@ -185,103 +188,97 @@ const {
               .slice(0, visibleProducts)
               .map((product) => (
                 <motion.div
-                  key={product.id}
-                  initial={{
-                    opacity: 0,
-                    y: 40,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  whileHover={{
-                    y: -10,
-                    scale: 1.02,
-                  }}
-                  transition={{
-                    duration: 0.4,
-                  }}
-                >
-                  <Link
-  to={`/product/${product.id}`}
-  className="relative bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-purple-500 transition block"
+  key={product.id}
+  initial={{ opacity: 0, y: 40 }}
+  animate={{ opacity: 1, y: 0 }}
+  whileHover={{ y: -12, scale: 1.03 }}
+  transition={{ duration: 0.4 }}
 >
-  <button
-    onClick={(e) => {
-      e.preventDefault()
-
-      if (isInWishlist(product.id)) {
-        removeFromWishlist(product.id)
-
-        toast.success(
-          `${product.name} removed from wishlist`
-        )
-      } else {
-        addToWishlist(product)
-
-        toast.success(
-          `${product.name} added to wishlist`
-        )
-      }
-    }}
-    className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-black/70 flex items-center justify-center text-xl hover:scale-110 transition"
+  <Link
+    to={`/product/${product.id}`}
+    className="group relative block overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition-all duration-300 hover:border-purple-500 hover:shadow-[0_0_40px_rgba(168,85,247,0.15)]"
   >
-    {isInWishlist(product.id)
-      ? "❤️"
-      : "🤍"}
-  </button>
-                    {product.featured && (
-                      <div className="absolute top-3 left-3 bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold z-10">
-                        🔥 Featured
-                      </div>
-                    )}
+    <button
+      onClick={(e) => {
+        e.preventDefault()
 
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="h-72 w-full object-cover"
-                    />
+        if (isInWishlist(product.id)) {
+          removeFromWishlist(product.id)
+          toast.success(`${product.name} removed from wishlist`)
+        } else {
+          addToWishlist(product)
+          toast.success(`${product.name} added to wishlist`)
+        }
+      }}
+      className="absolute top-3 right-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 text-xl transition hover:scale-110"
+    >
+      {isInWishlist(product.id) ? "❤️" : "🤍"}
+    </button>
 
-                    <div className="p-5">
-                      <h3 className="text-2xl font-semibold">
-                        {product.name}
-                      </h3>
+    {product.featured && (
+      <div className="absolute top-3 left-3 z-10 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 px-3 py-1 text-xs font-bold text-black">
+        ✨ Featured
+      </div>
+    )}
 
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-yellow-400">
-                          ⭐ {product.rating || 5}
-                        </span>
+    <div className="overflow-hidden">
+      <img
+        src={product.image}
+        alt={product.name}
+        className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+      />
+    </div>
 
-                        <span className="text-green-400 text-sm">
-                          📦 {product.stock || 0} Stock
-                        </span>
-                      </div>
+    <div className="p-5">
+      <h3 className="line-clamp-1 text-xl font-bold">
+        {product.name}
+      </h3>
 
-                      <p className="text-gray-400 text-sm mt-2">
-                        {product.category}
-                      </p>
+      <div className="mt-2 flex items-center justify-between">
+        <span className="text-yellow-400">
+          ⭐ {product.rating || 5}
+        </span>
 
-                      <p className="text-purple-400 mt-3 text-lg font-semibold">
-                        ${product.price}
-                      </p>
+        <span className="text-sm text-green-400">
+          📦 {product.stock || 0} Stock
+        </span>
+      </div>
 
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault()
+      <p className="mt-2 text-sm text-gray-400">
+        {product.category}
+      </p>
 
-                          addToCart(product)
+      <p className="mt-3 text-lg font-semibold text-purple-400">
+        ${product.price}
+      </p>
 
-                          toast.success(
-                            `${product.name} added to cart`
-                          )
-                        }}
-                        className="mt-5 w-full bg-purple-600 hover:bg-purple-700 py-3 rounded-xl font-semibold transition"
-                      >
-                        Add To Cart
-                      </button>
-                    </div>
-                  </Link>
-                </motion.div>
+      <button
+        onClick={(e) => {
+          e.preventDefault()
+          window.location.href = `/product/${product.id}`
+        }}
+        className="mt-4 w-full rounded-xl border border-zinc-700 py-3 font-medium transition hover:border-purple-500"
+      >
+        View Details
+      </button>
+
+      <button
+        onClick={(e) => {
+          e.preventDefault()
+
+          addToCart(product)
+
+          toast.success(
+            `${product.name} added to cart`
+          )
+        }}
+        className="mt-3 w-full rounded-xl bg-purple-600 py-3 font-semibold transition hover:bg-purple-700 shadow-lg shadow-purple-600/20"
+      >
+        Add To Cart
+      </button>
+    </div>
+  </Link>
+</motion.div>
               ))}
           </div>
 
